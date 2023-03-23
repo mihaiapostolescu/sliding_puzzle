@@ -1,8 +1,7 @@
-<canvas id="myCanvas" width = "600" height = "400"><canvas>
+<canvas id="myCanvas" width = "300" height = "300"><canvas>
 <script>
 /*
 To do list:
-- algoritm pentru evitarea configuratiilor necastigatoare
 - sa ne afiseze ai castigat la finalizarea jocului
 - sa facem miscarea cu animatie
 - sa facem patratelul gol la o pozitie random
@@ -50,6 +49,7 @@ var generate_screen = function() {
 		var line = [];
 		for(var i = 1;i <= 4; i++)
 		{
+			//se va inlocui valoarea "undefined" cu 0
 			var z = random(hat) || 0;
 			line.push(z);
 		}
@@ -94,7 +94,7 @@ function key_down(e)
 			screen[y-1][x] = 0;
 			y = y - 1;
 			redraw_screen();
-			console.log(e.key);
+			console.log(its_finished());
 		}
 	}
 	else if(e.key=="ArrowUp")
@@ -105,7 +105,7 @@ function key_down(e)
 			screen[y+1][x] = 0;
 			y = y + 1;
 			redraw_screen();
-			console.log(e.key);
+			console.log(its_finished());
 		}
 	}	
 	else if(e.key=="ArrowLeft")
@@ -116,7 +116,7 @@ function key_down(e)
 			screen[y][x+1] = 0;
 			x = x + 1;
 			redraw_screen();
-			console.log(e.key);
+			console.log(its_finished());
 		}
 	}	
 	else if(e.key=="ArrowRight")
@@ -127,7 +127,7 @@ function key_down(e)
 			screen[y][x-1] = 0;
 			x = x - 1;
 			redraw_screen();
-			console.log(e.key);
+			console.log(its_finished());
 		}	
 	}	
 }
@@ -162,10 +162,67 @@ var inversion_count = function(arr)
 		}
 	}
 	return count;
-
 }
 
+var row_of_empty_square = function()
+{
+	for(var i = 0; i < screen.length; i++)
+	{
+		for(var j = 0; j < screen.length; j++)
+		{
+			if(screen[i][j] == 0)
+			{
+				return i;
+			}
+		}		
+	}
+}
+
+var is_solvable = function()
+{
+	var arr = make_array();
+	var n = row_of_empty_square();
+	var m = inversion_count(arr);
+	if(n % 2 != 0 && m % 2 == 0)
+	{
+		return true;
+	}
+	if(n % 2 == 0 && m % 2 != 0)
+	{
+		return true;
+	}
+	return false; 
+}
+
+var its_finished = function()
+{
+	var n = 0;
+	for(var i = 0; i < screen.length; i++)
+	{
+		for(var j = 0; j < screen.length; j++)
+		{
+			var r = screen[i][j];
+			n++;
+			if(n == 16)
+			{
+				n = 0;
+			}
+			if(r != n)
+			{
+				return false
+			}
+		}
+	}
+	return true;
+}
+
+do {
 generate_screen();
+}while(!is_solvable())
+
+console.log(row_of_empty_square());
+console.log(is_solvable());
+console.log(its_finished());
 inversion_count(make_array());
 redraw_screen();
 addEventListener('keydown', key_down);

@@ -82,7 +82,7 @@ var redraw_screen = function()
 }
 
 var y = 3;
-var x = 3;
+var x = 2;
 
 function key_down(e)
 {
@@ -130,6 +130,19 @@ function key_down(e)
 			console.log(its_finished());
 		}	
 	}	
+	if (its_finished())
+		{
+			ctx.fillText("YOU WIN !!!",55,300);
+		}
+}
+
+function mouse_move(event)
+{
+	
+	var mx = event.clientX;
+	var my = event.clientY;
+	console.log(mx,my);
+
 }
 
 var make_array = function()
@@ -220,11 +233,18 @@ do {
 generate_screen();
 }while(!is_solvable())
 
-console.log(row_of_empty_square());
-console.log(is_solvable());
-console.log(its_finished());
-inversion_count(make_array());
+
+
+screen = [
+	[1,2,3,4],
+	[5,6,7,8],
+	[9,10,11,12],
+	[13,14,0,15]
+]
 redraw_screen();
+
 addEventListener('keydown', key_down);
+addEventListener('mousemove', mouse_move);
+
 
 </script>

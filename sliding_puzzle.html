@@ -60,12 +60,15 @@ var generate_screen = function() {
 	}
 }
 
-var redraw_screen = function()
+var redraw_screen = function(mx,my)
 {
 	//sterg ecranul/canvas
 	ctx.beginPath();
 	ctx.clearRect(0, 0, 600, 400);
 	
+	
+	var h = hit_test(mx,my);
+
 	//desenez ecranul
 	var n = 4;
 	for(var j = 0;j < n;j++)
@@ -73,15 +76,29 @@ var redraw_screen = function()
 		for(var i = 0; i < n; i++)
 		{
 			var z = screen[j][i];
-			if(z)
+			if(z && h.i == i && h.j == j)
 			{
-				ctx.rect(20.5+55*i,20.5+55*j,50,50);
+				ctx.fillStyle = "#FF0000";
+				ctx.fillRect(20.5+55*i,20.5+55*j,50,50);
+				ctx.stroke();
+				ctx.fillStyle = "#000000";
 				var t = (z >= 10 ? 10 : 0);
 				ctx.fillText(z,38-t+55*i,55+55*j);
-				ctx.stroke();
+
+			}
+			else
+			{ 
+				if(z)
+				{
+					ctx.rect(20.5+55*i,20.5+55*j,50,50);
+					var t = (z >= 10 ? 10 : 0);
+					ctx.fillText(z,38-t+55*i,55+55*j);
+					ctx.stroke();		
+				}
 			}
 		}
 	}
+	
 }
 
 var y = 3;
@@ -144,6 +161,7 @@ function mouse_move(event)
 	var mx = event.clientX;
 	var my = event.clientY;
 	console.log(hit_test(mx,my));
+	redraw_screen(mx,my);
 }
 
 function point_in_square(px,py,sx,sy,sw)

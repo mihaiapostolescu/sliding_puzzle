@@ -1,3 +1,6 @@
+<style>
+body, html { margin: 0; }
+</style>
 <canvas id="myCanvas" width = "300" height = "300"><canvas>
 <script>
 /*
@@ -138,11 +141,38 @@ function key_down(e)
 
 function mouse_move(event)
 {
-	
 	var mx = event.clientX;
 	var my = event.clientY;
-	console.log(mx,my);
+	console.log(hit_test(mx,my));
+}
 
+function point_in_square(px,py,sx,sy,sw)
+{
+	return  px >= sx && px <= sx + sw - 1 && 
+			py >= sy && py <= sy + sw - 1;
+}
+
+function hit_test(mx,my)
+{
+	var sx;
+	var sy;
+	var px = mx;
+	var py = my;
+	var sw = 50;
+	var n = 4;
+	for(var j = 0;j < n;j++)
+	{
+		for(var i = 0; i < n; i++)
+		{
+			sx = 20.5+55*i;
+			sy = 20.5+55*j;
+			if(point_in_square(px,py,sx,sy,sw))
+			{
+				return {i: i, j: j};
+			}
+		}
+	}
+	return false;
 }
 
 var make_array = function()

@@ -24,31 +24,37 @@ ctx.font = "10px Monospace";
 ctx.beginPath();
 ctx.font = "30px Arial";
 
-var numbers = [];
-for(var i = 1; i <= 15; i++)
-{
-	numbers.push(i);
+var create_hat = function() {
+	var hat = [];
+	for(var i = 1; i <= 15; i++)
+	{
+		hat.push(i);
+	}
+	return hat;
 }
 
-var random = function()
+var random = function(hat)
 {
-	var a = Math.floor(Math.random()*(numbers.length));
-	var b = numbers[a];
-	numbers.splice(a,1);
+	var a = Math.floor(Math.random()*(hat.length));
+	var b = hat[a];
+	hat.splice(a,1);
 	return b;
 }
 
-var screen = [];
-
-for(var j = 1;j <=4; j++)
-{
-	var line = [];
-	for(var i = 1;i <= 4; i++)
+var screen;
+var generate_screen = function() {
+	screen = [];
+	var hat = create_hat();
+	for(var j = 1;j <=4; j++)
 	{
-		var z = random() || 0;
-		line.push(z);
+		var line = [];
+		for(var i = 1;i <= 4; i++)
+		{
+			var z = random(hat) || 0;
+			line.push(z);
+		}
+		screen.push(line);
 	}
-	screen.push(line);
 }
 
 var redraw_screen = function()
@@ -126,6 +132,42 @@ function key_down(e)
 	}	
 }
 
+var make_array = function()
+{
+	var arr = [];
+	for(var i = 0; i < 4; i++)
+	{
+		for(var j = 0; j < 4; j++)
+		{
+			if(screen[i][j] != 0)
+			{
+				arr.push(screen[i][j]);
+			}
+		}
+	}
+	return arr;
+}
+
+var inversion_count = function(arr)
+{
+	var count = 0;
+	for(var i = 0; i < arr.length-1; i++)
+	{
+		for(var j = i + 1; j < arr.length; j++)
+		{
+			if(arr[i]>arr[j])
+			{
+				count++;
+			}
+		}
+	}
+	return count;
+
+}
+
+generate_screen();
+inversion_count(make_array());
+redraw_screen();
 addEventListener('keydown', key_down);
 
 </script>
